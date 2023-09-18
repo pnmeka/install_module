@@ -1,0 +1,40 @@
+FROM debian:10-slim
+
+# Set the version of Monero to be installed
+ARG MONERO_VERSION=0.18.2.2
+
+# Install required dependencies
+RUN apt-get update -q -y --no-install-recommends && \
+    apt-get install -q -y --no-install-recommends \
+    ca-certificates curl bzip2 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Download and extract Monero
+RUN curl -L -O https://downloads.getmonero.org/cli/linux64/monero-linux-x64-${MONERO_VERSION}.tar.bz2 && \
+    tar -xjf monero-linux-x64-${MONERO_VERSION}.tar.bz2 -C /usr/local/bin --strip-components=1 && \
+    rm monero-linux-x64-${MONERO_VERSION}.tar.bz2
+
+# Create a non-root user for running Monero
+RUN groupadd -r monero -g 1000 && \
+    useradd -u 1000 -r -g monero -s /sbin/nologin -c "monero node user" monero
+
+# Create necessary directories and set permissions
+RUN mkdir -p /home/monero/.bitmonero && \
+    chown -R monero:monero /home/monero/.bitmonero && \
+    chmod -R 700 /home/monero/.bitmonero
+
+USER monero
+
+# Expose ports for Monero Daemon and Monero Wallet RPC server
+EXPOSE 18080 18081 18082
+
+# VOLUME for Monero node data
+VOLUME /home/monero/.bitmonero
+
+# WORKDIR for Monero node data
+WORKDIR /home/monero
+
+# Run the Monero Daemon with the RPC server enabled
+ENTRYPOINT ["monerod", "--rpc-bind-ip=0.0.0.0", "--confirm-external-bind"]
+
