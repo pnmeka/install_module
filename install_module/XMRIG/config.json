@@ -1,0 +1,25 @@
+{
+    "api": {
+        "worker-id": "darnahi"
+    },
+    "http": {
+        "enabled": true,
+        "host": "0.0.0.0",
+        "port": 3006,
+        "access-token": "health",
+        "restricted": true
+    },
+    "autosave": true,
+    "donate-level": 1,
+    "cpu": true,
+    "opencl": false,
+    "cuda": false,
+    "pools": [
+        {
+            "url": "gulf.moneroocean.stream:20128",
+            "user": "{needs a wallet address}",
+            "keepalive": true,
+            "tls": true
+        }
+    ]
+}
