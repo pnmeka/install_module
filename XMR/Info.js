@@ -1,5 +1,5 @@
 const appInfo = {
-    App_name: 'XMR Node', 
+    App_name: 'XMR', 
     App_folder: 'XMR',
     Port: '5000',
     Requirements: 'Docker. 64 bit CPU. It wouldnt work of Single board computers.',
