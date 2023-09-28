@@ -26,25 +26,25 @@ compose_dir = os.path.join(os.getcwd(), "install_module", "XMR")
 def main():
     try:
 
-    # Create network
-    subprocess.run(["docker", "network", "create", "mynetwork"])
+       # Create network
+       subprocess.run(["docker", "network", "create", "mynetwork"])
 
-    # Build the Flask image
-    subprocess.run(["docker", "build", "-t", "flask_xmr", "-f", "Dockerfile", "."], cwd=compose_dir)
+       # Build the Flask image
+       subprocess.run(["docker", "build", "-t", "flask_xmr", "-f", "Dockerfile", "."], cwd=compose_dir)
 
-    # Run the Flask container
-    subprocess.run(["docker", "run", "-dit", "--name", "flask_xmrnode", "--network=mynetwork", "-p", "5000:5000", "flask_xmr"])
+       # Run the Flask container
+       subprocess.run(["docker", "run", "-dit", "--name", "flask_xmrnode", "--network=mynetwork", "-p", "5000:5000", "flask_xmr"])
 
-    # Build the Monero image
-    subprocess.run(["docker", "build", "-t", "my_monero_image", "-f", "Dockerfile-monerod", "."], cwd=compose_dir)
+       # Build the Monero image
+       subprocess.run(["docker", "build", "-t", "my_monero_image", "-f", "Dockerfile-monerod", "."], cwd=compose_dir)
 
-    # Run the Monero container
-    subprocess.run(["docker", "run", "-dit", "--name", "my_monero_image", "--network=mynetwork", "-p", "18081:18081", "-v", f"{HS_path}:/home/monero/.bitmonero", "my_monero_image"])
+       # Run the Monero container
+       subprocess.run(["docker", "run", "-dit", "--name", "my_monero_image", "--network=mynetwork", "-p", "18081:18081", "-v", f"{HS_path}:/home/monero/.bitmonero", "my_monero_image"])
     
-    #write to static/XMR_script.js
-    file_path = f'{HS_path}/static/'
-    command3 = f"cp {current_dir}/XMR_script.js {file_path}/XMR_script.js"
-    subprocess.run(command3)
+       #write to static/XMR_script.js
+       file_path = f'{HS_path}/static'
+       command3 = f"cp {current_dir}/XMR_script.js {file_path}/XMR_script.js"
+       subprocess.run(command3)
     
     except subprocess.CalledProcessError as e:
         print(f"An error occurred: {e}")
